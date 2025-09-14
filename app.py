@@ -10,7 +10,7 @@ from reportlab.lib import pagesizes
 import csv
 
 class MathWorksheetGenerator:
-    """Generate math worksheets with randomized problems from a large bank"""
+    """Generate math worksheets with customizable problem counts and matching riddles"""
     
     def __init__(self):
         self.worksheet_count = 0
@@ -23,14 +23,35 @@ class MathWorksheetGenerator:
         self.equation_problems_bank = self._create_equation_bank()
         self.percent_problems_bank = self._create_percent_bank()
         
-        # Initialize riddle banks
-        self.riddles_8_letter = self._create_8_letter_riddles()
-        self.riddles_9_letter = self._create_9_letter_riddles()
+        # Initialize riddle banks by answer length
+        self.riddle_bank = self._create_riddle_bank()
         
     def _create_integer_bank(self):
         """Create a bank of integer addition/subtraction problems"""
-        return [
-            # Format: (problem, answer)
+        problems = []
+        # Generate a large set of integer problems
+        for _ in range(100):
+            a = random.randint(-50, 50)
+            b = random.randint(-50, 50)
+            operation = random.choice(['+', '-'])
+            
+            if operation == '+':
+                if b < 0:
+                    problem = f"{a} + ({b})"
+                else:
+                    problem = f"{a} + {b}"
+                answer = str(a + b)
+            else:
+                if b < 0:
+                    problem = f"{a} - ({b})"
+                else:
+                    problem = f"{a} - {b}"
+                answer = str(a - b)
+            
+            problems.append((problem, answer))
+        
+        # Add some specific curated problems
+        problems.extend([
             ("-15 + 23", "8"),
             ("34 + (-42)", "-8"),
             ("-18 - (-13)", "-5"),
@@ -39,43 +60,13 @@ class MathWorksheetGenerator:
             ("45 - (-7)", "52"),
             ("-31 + 19", "-12"),
             ("16 + (-16)", "0"),
-            ("-25 + 15", "-10"),
-            ("42 - 53", "-11"),
-            ("-8 + (-12)", "-20"),
-            ("35 - (-10)", "45"),
-            ("-17 + 29", "12"),
-            ("48 + (-48)", "0"),
-            ("-22 - (-18)", "-4"),
-            ("15 - 27", "-12"),
-            ("-30 + 45", "15"),
-            ("28 + (-35)", "-7"),
-            ("-14 - 6", "-20"),
-            ("50 - 65", "-15"),
-            ("-7 + (-8)", "-15"),
-            ("33 - (-12)", "45"),
-            ("-19 + 11", "-8"),
-            ("24 + (-31)", "-7"),
-            ("-26 - (-26)", "0"),
-            ("18 - 30", "-12"),
-            ("-35 + 50", "15"),
-            ("44 + (-52)", "-8"),
-            ("-11 - 14", "-25"),
-            ("37 - 48", "-11"),
-            ("-28 + 28", "0"),
-            ("22 - (-8)", "30"),
-            ("-16 + 24", "8"),
-            ("39 + (-47)", "-8"),
-            ("-21 - (-16)", "-5"),
-            ("29 - 40", "-11"),
-            ("-13 + (-10)", "-23"),
-            ("46 - (-6)", "52"),
-            ("-32 + 20", "-12"),
-            ("17 + (-17)", "0"),
-        ]
+        ])
+        
+        return problems
     
     def _create_fraction_bank(self):
         """Create a bank of fraction problems"""
-        return [
+        problems = [
             ("1/2 + 1/4", "3/4"),
             ("3/4 - 1/2", "1/4"),
             ("2/3 + 1/6", "5/6"),
@@ -106,206 +97,221 @@ class MathWorksheetGenerator:
             ("5/8 - 1/4", "3/8"),
             ("1/3 + 2/3", "1"),
             ("1 - 1/4", "3/4"),
-            ("1/2 + 1/3", "5/6"),
-            ("3/4 - 1/3", "5/12"),
-            ("2/5 + 3/10", "7/10"),
-            ("3/4 - 2/3", "1/12"),
-            ("1/6 + 1/4", "5/12"),
-            ("5/6 - 1/4", "7/12"),
-            ("3/8 + 1/4", "5/8"),
-            ("2/3 - 1/4", "5/12"),
-            ("1/5 + 3/10", "1/2"),
-            ("7/8 - 1/2", "3/8"),
         ]
+        
+        # Generate more fraction problems
+        denominators = [2, 3, 4, 5, 6, 8, 10, 12]
+        for _ in range(50):
+            d1 = random.choice(denominators)
+            d2 = random.choice(denominators)
+            n1 = random.randint(1, d1-1)
+            n2 = random.randint(1, d2-1)
+            
+            # Simple same denominator problems
+            if d1 == d2:
+                if random.choice([True, False]):
+                    result_n = n1 + n2
+                    if result_n < d1:
+                        problems.append((f"{n1}/{d1} + {n2}/{d2}", f"{result_n}/{d1}"))
+                else:
+                    if n1 > n2:
+                        problems.append((f"{n1}/{d1} - {n2}/{d2}", f"{n1-n2}/{d1}"))
+        
+        return problems
     
     def _create_decimal_bank(self):
         """Create a bank of decimal problems"""
-        return [
-            ("3.5 + 2.7", "6.2"),
-            ("8.4 - 3.6", "4.8"),
-            ("12.5 + 7.5", "20.0"),
-            ("15.8 - 9.3", "6.5"),
-            ("4.25 + 3.75", "8.0"),
-            ("10.0 - 2.5", "7.5"),
-            ("5.5 + 4.5", "10.0"),
-            ("9.6 - 4.8", "4.8"),
-            ("7.2 + 2.8", "10.0"),
-            ("14.5 - 6.5", "8.0"),
-            ("3.3 + 4.7", "8.0"),
-            ("11.9 - 5.4", "6.5"),
-            ("6.25 + 1.75", "8.0"),
-            ("9.0 - 4.5", "4.5"),
-            ("2.4 + 5.6", "8.0"),
-            ("13.7 - 8.2", "5.5"),
-            ("4.5 + 3.5", "8.0"),
-            ("16.4 - 9.8", "6.6"),
-            ("5.75 + 2.25", "8.0"),
-            ("12.0 - 7.5", "4.5"),
-            ("8.8 + 1.2", "10.0"),
-            ("15.5 - 7.5", "8.0"),
-            ("3.6 + 4.4", "8.0"),
-            ("10.8 - 5.3", "5.5"),
-            ("7.25 + 0.75", "8.0"),
-            ("14.0 - 6.0", "8.0"),
-            ("2.5 + 7.5", "10.0"),
-            ("11.6 - 3.6", "8.0"),
-            ("4.4 + 5.6", "10.0"),
-            ("18.9 - 10.9", "8.0"),
-            ("6.5 + 3.5", "10.0"),
-            ("17.2 - 9.2", "8.0"),
-            ("1.9 + 6.1", "8.0"),
-            ("9.9 - 4.4", "5.5"),
-            ("5.25 + 4.75", "10.0"),
-            ("13.3 - 5.3", "8.0"),
-            ("3.8 + 6.2", "10.0"),
-            ("15.7 - 7.7", "8.0"),
-            ("7.5 + 2.5", "10.0"),
-            ("16.0 - 8.0", "8.0"),
-        ]
+        problems = []
+        
+        # Generate decimal problems
+        for _ in range(100):
+            a = round(random.uniform(0, 20), 1)
+            b = round(random.uniform(0, 20), 1)
+            
+            if random.choice([True, False]):
+                answer = round(a + b, 1)
+                problems.append((f"{a} + {b}", str(answer)))
+            else:
+                if a >= b:
+                    answer = round(a - b, 1)
+                    problems.append((f"{a} - {b}", str(answer)))
+        
+        return problems
     
     def _create_equation_bank(self):
         """Create a bank of one-step equation problems"""
-        return [
-            ("x + 5 = 12", "7"),
-            ("x - 3 = 8", "11"),
-            ("2x = 16", "8"),
-            ("x/4 = 3", "12"),
-            ("x + 9 = 15", "6"),
-            ("3x = 27", "9"),
-            ("x - 7 = -2", "5"),
-            ("x/2 = 4", "8"),
-            ("x + 8 = 20", "12"),
-            ("x - 5 = 10", "15"),
-            ("4x = 32", "8"),
-            ("x/3 = 5", "15"),
-            ("x + 11 = 18", "7"),
-            ("x - 9 = 3", "12"),
-            ("5x = 45", "9"),
-            ("x/6 = 2", "12"),
-            ("x + 7 = 13", "6"),
-            ("x - 4 = 11", "15"),
-            ("6x = 42", "7"),
-            ("x/5 = 3", "15"),
-            ("x + 10 = 25", "15"),
-            ("x - 8 = 7", "15"),
-            ("7x = 56", "8"),
-            ("x/8 = 2", "16"),
-            ("x + 13 = 20", "7"),
-            ("x - 6 = 9", "15"),
-            ("8x = 64", "8"),
-            ("x/7 = 2", "14"),
-            ("x + 4 = 10", "6"),
-            ("x - 10 = 5", "15"),
-            ("9x = 72", "8"),
-            ("x/9 = 1", "9"),
-            ("x + 15 = 30", "15"),
-            ("x - 12 = 0", "12"),
-            ("10x = 80", "8"),
-            ("x/10 = 2", "20"),
-            ("x + 3 = 18", "15"),
-            ("x - 2 = 13", "15"),
-            ("2x = 30", "15"),
-            ("x/4 = 4", "16"),
-        ]
+        problems = []
+        
+        # Generate various equation types
+        for _ in range(30):
+            # Addition equations: x + a = b
+            a = random.randint(1, 20)
+            result = random.randint(5, 30)
+            answer = result - a
+            problems.append((f"x + {a} = {result}", str(answer)))
+            
+            # Subtraction equations: x - a = b
+            a = random.randint(1, 15)
+            result = random.randint(1, 20)
+            answer = result + a
+            problems.append((f"x - {a} = {result}", str(answer)))
+            
+            # Multiplication equations: ax = b
+            a = random.randint(2, 12)
+            answer = random.randint(1, 15)
+            result = a * answer
+            problems.append((f"{a}x = {result}", str(answer)))
+            
+            # Division equations: x/a = b
+            a = random.randint(2, 10)
+            result = random.randint(1, 15)
+            answer = a * result
+            problems.append((f"x/{a} = {result}", str(answer)))
+        
+        return problems
     
     def _create_percent_bank(self):
         """Create a bank of percent problems"""
-        return [
-            ("50% of 80", "40"),
-            ("25% of 120", "30"),
-            ("10% of 350", "35"),
-            ("75% of 40", "30"),
-            ("20% of 150", "30"),
-            ("100% of 45", "45"),
-            ("30% of 200", "60"),
-            ("5% of 100", "5"),
-            ("50% of 60", "30"),
-            ("25% of 80", "20"),
-            ("10% of 200", "20"),
-            ("75% of 60", "45"),
-            ("20% of 100", "20"),
-            ("100% of 75", "75"),
-            ("30% of 100", "30"),
-            ("5% of 200", "10"),
-            ("50% of 100", "50"),
-            ("25% of 160", "40"),
-            ("10% of 450", "45"),
-            ("75% of 80", "60"),
-            ("20% of 200", "40"),
-            ("100% of 35", "35"),
-            ("30% of 150", "45"),
-            ("5% of 300", "15"),
-            ("50% of 90", "45"),
-            ("25% of 200", "50"),
-            ("10% of 300", "30"),
-            ("75% of 100", "75"),
-            ("20% of 250", "50"),
-            ("100% of 60", "60"),
-            ("40% of 100", "40"),
-            ("60% of 50", "30"),
-            ("15% of 200", "30"),
-            ("80% of 50", "40"),
-            ("90% of 100", "90"),
-            ("35% of 100", "35"),
-            ("45% of 100", "45"),
-            ("55% of 100", "55"),
-            ("65% of 100", "65"),
-            ("85% of 100", "85"),
-        ]
+        problems = []
+        
+        # Common percentages
+        common_percents = [5, 10, 15, 20, 25, 30, 40, 50, 60, 70, 75, 80, 90, 100]
+        common_values = [20, 40, 50, 60, 80, 100, 120, 150, 200, 250, 300, 400, 500]
+        
+        for _ in range(100):
+            percent = random.choice(common_percents)
+            value = random.choice(common_values)
+            answer = int(value * percent / 100)
+            problems.append((f"{percent}% of {value}", str(answer)))
+        
+        return problems
     
-    def _create_8_letter_riddles(self):
-        """Create riddles with 8-letter answers"""
-        return [
-            ("I have branches but no fruit, trunk, or leaves. What am I?", "LIBRARY!"),
-            ("What gets wet while drying?", "TOWELING"),
-            ("I have keys but no locks, space but no room. What am I?", "KEYBOARD"),
-            ("I disappear as soon as you say my name. What am I?", "SILENCES"),
-            ("What can run but never walks, has a mouth but never talks?", "RIVERBED"),
-            ("What has a face and two hands but no arms or legs?", "CLOCKING"),
-            ("I'm tall when I'm young, short when I'm old. What am I?", "CANDLES!"),
-            ("What has many teeth but cannot bite?", "HAIRCOM"),
-            ("What can travel around the world while staying in a corner?", "POSTAGES"),
-            ("I have cities but no houses, water but no fish. What am I?", "ROADMAPS"),
-            ("What breaks but never falls, and falls but never breaks?", "DAYNIGHT"),
-            ("The more you take, the more you leave behind. What am I?", "FOOTSTEP"),
-            ("What has a head, a tail, is brown, and has no legs?", "PENNIES!"),
-            ("What comes once in a minute, twice in a moment, never in a thousand years?", "LETTER-M"),
-            ("What has an eye but cannot see?", "NEEDLES!"),
-            ("I'm light as a feather, yet the strongest can't hold me for long. What am I?", "BREATHES"),
-            ("What can fill a room but takes up no space?", "LIGHTING"),
-            ("Forward I'm heavy, backward I'm not. What am I?", "TONWEIGHT"),
-            ("What begins with T, ends with T, and has T in it?", "TEAPOTS!"),
-            ("What gets bigger the more you take away?", "HOLEDIGS"),
+    def _create_riddle_bank(self):
+        """Create a comprehensive riddle bank organized by answer length"""
+        riddle_bank = {}
+        
+        # Base riddles that can be extended with word combinations
+        base_riddles = [
+            # Nature & Weather
+            ("What can run but never walks, has a mouth but never talks?", ["RIVER", "WATER"]),
+            ("I fly without wings, I cry without eyes. What am I?", ["CLOUD", "STORM"]),
+            ("What gets wet while drying?", ["TOWEL"]),
+            ("I'm tall when young, short when old. What am I?", ["CANDLE"]),
+            ("The more there is, the less you see. What is it?", ["DARKNESS", "FOG"]),
+            
+            # Objects & Tools
+            ("What has keys but no locks, space but no room?", ["KEYBOARD"]),
+            ("What has many teeth but cannot bite?", ["COMB", "SAW", "GEAR"]),
+            ("What has a face and hands but no body?", ["CLOCK", "WATCH"]),
+            ("What has an eye but cannot see?", ["NEEDLE", "STORM"]),
+            ("What has a neck but no head?", ["BOTTLE"]),
+            
+            # Concepts & Abstract
+            ("I disappear as soon as you say my name. What am I?", ["SILENCE"]),
+            ("The more you take, the more you leave behind. What?", ["FOOTSTEPS", "STEPS"]),
+            ("What breaks but never falls?", ["DAWN", "DAY"]),
+            ("Forward I'm heavy, backward I'm not. What am I?", ["TON"]),
+            ("What comes once in a minute, twice in a moment?", ["LETTER M", "M"]),
+            
+            # Places & Buildings
+            ("What building has the most stories?", ["LIBRARY"]),
+            ("I have cities but no houses, water but no fish. What am I?", ["MAP", "ATLAS"]),
+            ("What room has no doors or windows?", ["MUSHROOM"]),
+            
+            # Food & Kitchen
+            ("What begins with T, ends with T, and has T in it?", ["TEAPOT"]),
+            ("I have branches but no fruit, trunk, or leaves. What am I?", ["BANK", "LIBRARY"]),
+            
+            # Actions & Movement
+            ("What can travel around the world while staying in a corner?", ["STAMP"]),
+            ("What can you catch but not throw?", ["COLD", "BREATH"]),
+            ("What gets bigger the more you take away?", ["HOLE"]),
+            ("What goes up but never comes down?", ["AGE", "TIME"]),
         ]
+        
+        # Generate riddles for different lengths (10-30)
+        for length in range(10, 31):
+            riddle_bank[length] = []
+            
+            # Method 1: Use exact length words/phrases
+            for riddle_text, answers in base_riddles:
+                for answer in answers:
+                    if len(answer) == length:
+                        riddle_bank[length].append((riddle_text, answer))
+            
+            # Method 2: Combine words to make longer answers
+            if length >= 8:
+                # Combine two related words
+                combinations = [
+                    ("What has keys but can't open locks, and space but no room?", "KEYBOARD", "COMPUTER"),
+                    ("What gets wet while drying and hangs in your bathroom?", "BATH", "TOWEL"),
+                    ("What flies without wings and cries without eyes?", "RAIN", "CLOUD"),
+                    ("What building has stories and keeps knowledge?", "LIBRARY", "BOOKS"),
+                    ("What can be cracked, made, told, and played?", "JOKE", "RIDDLE"),
+                ]
+                
+                for riddle_text, word1, word2 in combinations:
+                    combined = word1 + word2
+                    if len(combined) == length:
+                        riddle_bank[length].append((riddle_text, combined))
+            
+            # Method 3: Add descriptive phrases for longer answers
+            if length >= 15:
+                extended_riddles = [
+                    (f"What has keys but no locks, space but no room, and you can enter but not go inside? (Think about what you're typing on)", "COMPUTER" + "KEYBOARD"[:length-8]),
+                    (f"I have many pages but I'm not a book, I have many links but I'm not a chain. What am I?", "INTERNETWEBSITE"[:length]),
+                    (f"I can be long or short, I can be grown or bought, I can be painted or left bare. What am I?", "FINGERNAILSHAND"[:length]),
+                ]
+                
+                for riddle_text, answer in extended_riddles:
+                    if len(answer) <= length:
+                        # Pad with exclamation marks or repeated letters if needed
+                        while len(answer) < length:
+                            answer += "!"
+                        riddle_bank[length].append((riddle_text, answer[:length]))
+            
+            # Method 4: Create number/letter pattern riddles for any length
+            if len(riddle_bank[length]) == 0:
+                # Fallback riddles that work for any length
+                alphabet_riddle = f"What comes after {'A' * (length-1)}?", "A" * (length-1) + "B"
+                counting_riddle = f"Count from 1 to {length}. What do you get?", "".join([str(i%10) for i in range(1, length+1)])
+                pattern_riddle = f"Complete the pattern: {'AB' * (length//2)}", "AB" * (length//2) + ("A" if length % 2 else "")
+                
+                riddle_bank[length].extend([
+                    (alphabet_riddle[0], alphabet_riddle[1]),
+                    (counting_riddle[0], counting_riddle[1]),
+                    (pattern_riddle[0], pattern_riddle[1]),
+                ])
+        
+        return riddle_bank
     
-    def _create_9_letter_riddles(self):
-        """Create riddles with 9-letter answers"""
-        return [
-            ("What has many rings but no fingers?", "TELEPHONE"),
-            ("I speak without a mouth and hear without ears. What am I?", "ECHOSOUNG"),
-            ("What building has the most stories?", "LIBRARIES"),
-            ("I fly without wings, I cry without eyes. What am I?", "CLOUDRAIN"),
-            ("What can you catch but not throw?", "COLDVIRUS"),
-            ("I have no life, but I can die. What am I?", "BATTERIES"),
-            ("What has words but never speaks?", "BOOKSHELF"),
-            ("The more there is, the less you see. What is it?", "DARKNIGHT"),
-            ("What has a neck but no head?", "BOTTLEJAR"),
-            ("I'm always in front of you but can't be seen. What am I?", "TOMORROW!"),
-        ]
+    def _get_riddle_for_length(self, length):
+        """Get or generate a riddle with an answer of specific length"""
+        if length in self.riddle_bank and self.riddle_bank[length]:
+            return random.choice(self.riddle_bank[length])
+        else:
+            # Generate a simple pattern riddle as fallback
+            letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            answer = ""
+            for i in range(length):
+                answer += letters[i % 26]
+            
+            riddle = f"What word has {length} letters and follows the alphabet?"
+            return (riddle, answer)
     
     def _assign_letters_to_problems(self, problems, riddle_answer):
         """Assign letters from the riddle answer to problems"""
         result = []
         # Remove special characters from riddle answer for letter assignment
-        letters = [c for c in riddle_answer if c.isalpha()]
+        letters = [c for c in riddle_answer if c.isalpha() or c in "!?.,"]
         
         for i, (problem, answer) in enumerate(problems[:len(letters)]):
             result.append((problem, answer, letters[i]))
         
         return result
     
-    def create_worksheet_from_bank(self, standard_type, worksheet_num=1):
-        """Create a worksheet by randomly selecting from the problem bank"""
+    def create_worksheet_from_bank(self, standard_type, num_problems, worksheet_num=1):
+        """Create a worksheet with specified number of problems"""
         
         # Select problem bank and worksheet title based on standard
         if standard_type == "integers":
@@ -333,25 +339,21 @@ class MathWorksheetGenerator:
         
         # Randomly select problems
         random.shuffle(problem_bank)
+        selected_problems = problem_bank[:num_problems]
         
-        # Randomly select a riddle (8 or 9 problems based on riddle length)
-        if random.choice([True, False]):
-            riddle, riddle_answer = random.choice(self.riddles_8_letter)
-            selected_problems = problem_bank[:8]
-        else:
-            riddle, riddle_answer = random.choice(self.riddles_9_letter)
-            selected_problems = problem_bank[:9]
+        # Get a riddle with answer length matching number of problems
+        riddle, riddle_answer = self._get_riddle_for_length(num_problems)
         
         # Assign letters to problems
         problems_with_letters = self._assign_letters_to_problems(selected_problems, riddle_answer)
         
         # Create the worksheet
-        self._create_worksheet(filename, title, problems_with_letters, riddle, riddle_answer)
+        self._create_worksheet(filename, title, problems_with_letters, riddle, riddle_answer, num_problems)
         
         return filename
     
-    def _create_worksheet(self, filename, title, problems, riddle, riddle_answer):
-        """Generic worksheet creator"""
+    def _create_worksheet(self, filename, title, problems, riddle, riddle_answer, num_problems):
+        """Generic worksheet creator that handles variable number of problems"""
         print(f"Creating worksheet: {filename}")
         
         c = canvas.Canvas(filename, pagesize=pagesizes.letter)
@@ -362,30 +364,62 @@ class MathWorksheetGenerator:
         c.drawString(50, height - 50, f"MATH WORKSHEET - {title}")
         
         # Riddle
-        c.setFont("Helvetica-Bold", 14)
-        c.drawString(50, height - 90, f"RIDDLE: {riddle}")
+        c.setFont("Helvetica-Bold", 12)
+        c.drawString(50, height - 80, f"RIDDLE: {riddle}")
         
-        c.setFont("Helvetica", 11)
-        c.drawString(50, height - 110, "Solve each problem. Find your answer in the Answer Bank.")
-        c.drawString(50, height - 125, "Write the corresponding letter. The letters spell the riddle answer!")
+        c.setFont("Helvetica", 10)
+        c.drawString(50, height - 100, "Solve each problem. Find your answer in the Answer Bank.")
+        c.drawString(50, height - 115, "Write the corresponding letter. The letters spell the riddle answer!")
+        
+        # Calculate spacing based on number of problems
+        if num_problems <= 15:
+            problems_per_column = num_problems
+            num_columns = 1
+            y_spacing = 30
+            start_y = height - 145
+        elif num_problems <= 20:
+            problems_per_column = num_problems
+            num_columns = 1
+            y_spacing = 25
+            start_y = height - 145
+        else:
+            # For 21-30 problems, use two columns
+            problems_per_column = (num_problems + 1) // 2
+            num_columns = 2
+            y_spacing = min(25, (height - 350) // problems_per_column)
+            start_y = height - 145
         
         # Draw problems
-        c.setFont("Helvetica", 12)
-        y_position = height - 160
+        c.setFont("Helvetica", 10)
         
-        for i, (problem, answer, letter) in enumerate(problems, 1):
-            c.drawString(50, y_position, f"{i}.")
-            c.drawString(70, y_position, f"{problem} = __________")
-            c.drawString(350, y_position, "Letter: _____")
-            y_position -= 35
+        for i, (problem, answer, letter) in enumerate(problems):
+            if num_columns == 1:
+                x_position = 50
+                y_position = start_y - (i * y_spacing)
+            else:
+                # Two column layout
+                column = i // problems_per_column
+                row = i % problems_per_column
+                x_position = 50 + (column * 280)
+                y_position = start_y - (row * y_spacing)
+            
+            c.drawString(x_position, y_position, f"{i+1}.")
+            c.drawString(x_position + 20, y_position, f"{problem} = _____")
+            c.drawString(x_position + 180, y_position, "Letter: ___")
+        
+        # Answer Bank Position
+        if num_problems <= 20:
+            answer_bank_y = start_y - (num_problems * y_spacing) - 40
+        else:
+            answer_bank_y = start_y - (problems_per_column * y_spacing) - 40
         
         # Answer Bank Box
-        c.setFont("Helvetica-Bold", 14)
-        c.rect(40, y_position - 120, 530, 100)
-        c.drawString(50, y_position - 20, "ANSWER BANK:")
+        c.setFont("Helvetica-Bold", 12)
+        c.rect(40, answer_bank_y - 80, 530, 70)
+        c.drawString(50, answer_bank_y - 15, "ANSWER BANK:")
         
         # Create answer bank with answers plus decoys
-        c.setFont("Helvetica", 11)
+        c.setFont("Helvetica", 9)
         answer_bank = {}
         
         # Add real answers
@@ -394,33 +428,44 @@ class MathWorksheetGenerator:
             
         # Add some decoy answers
         decoys = self._get_decoys(title)
-        for decoy_answer, decoy_letter in decoys.items():
+        decoy_count = min(10, 30 - len(problems))  # Add fewer decoys for larger worksheets
+        for decoy_answer, decoy_letter in list(decoys.items())[:decoy_count]:
             if decoy_answer not in answer_bank:
                 answer_bank[decoy_answer] = decoy_letter
         
-        # Shuffle answer bank for display
+        # Shuffle and draw answer bank
         answer_items = list(answer_bank.items())
         random.shuffle(answer_items)
         
-        # Draw answer bank
-        y_position -= 45
+        y_position = answer_bank_y - 35
         x_position = 50
         count = 0
+        items_per_row = 8 if len(answer_items) <= 16 else 10
         
         for answer, letter in answer_items:
-            c.drawString(x_position, y_position, f"{answer} → {letter}")
-            x_position += 65
+            c.drawString(x_position, y_position, f"{answer}→{letter}")
+            x_position += (520 // items_per_row)
             count += 1
-            if count % 8 == 0:
+            if count % items_per_row == 0:
                 x_position = 50
-                y_position -= 20
+                y_position -= 15
         
         # Riddle answer spaces
-        c.setFont("Helvetica-Bold", 14)
-        c.drawString(50, y_position - 50, "RIDDLE ANSWER:")
-        c.setFont("Helvetica", 20)
-        spaces = "  ".join(["___"] * len([c for c in riddle_answer if c.isalpha()]))
-        c.drawString(180, y_position - 50, spaces)
+        c.setFont("Helvetica-Bold", 12)
+        riddle_y = answer_bank_y - 110
+        c.drawString(50, riddle_y, "RIDDLE ANSWER:")
+        
+        # Adjust spacing for answer blanks based on number of letters
+        c.setFont("Helvetica", 14)
+        if num_problems <= 15:
+            spaces = "  ".join(["___"] * num_problems)
+            c.drawString(160, riddle_y, spaces)
+        else:
+            # For longer answers, use two lines
+            first_line = "  ".join(["___"] * 15)
+            second_line = "  ".join(["___"] * (num_problems - 15))
+            c.drawString(50, riddle_y - 20, first_line)
+            c.drawString(50, riddle_y - 40, second_line)
         
         # Add footer
         c.setFont("Helvetica-Oblique", 9)
@@ -444,25 +489,20 @@ class MathWorksheetGenerator:
     def _get_decoys(self, title):
         """Get appropriate decoy answers based on worksheet type"""
         if "Integer" in title:
-            decoys = [str(random.randint(-30, 30)) for _ in range(8)]
-            letters = ["M", "Q", "V", "W", "X", "Z", "J", "F"]
+            decoys = {str(random.randint(-30, 30)): chr(65+i) for i in range(26)}
         elif "Fraction" in title:
-            decoys = ["1/8", "3/8", "7/8", "1", "2/5", "3/5", "1/10", "9/10"]
-            letters = ["X", "Y", "Z", "W", "Q", "V", "J", "F"]
+            common_fractions = ["1/8", "3/8", "7/8", "1/5", "2/5", "3/5", "4/5", "1/10", "3/10", "7/10", "9/10", "1/12", "5/12", "7/12", "11/12"]
+            decoys = {frac: chr(65+i) for i, frac in enumerate(common_fractions)}
         elif "Decimal" in title:
-            decoys = ["3.5", "8.5", "12.0", "5.0", "15.5", "2.5", "9.5", "11.0"]
-            letters = ["X", "Y", "Z", "W", "Q", "V", "J", "F"]
+            decoys = {str(round(random.uniform(0, 20), 1)): chr(65+i) for i in range(26)}
         elif "Equation" in title:
-            decoys = ["10", "15", "4", "20", "3", "13", "18", "25"]
-            letters = ["X", "Y", "Z", "W", "Q", "V", "J", "F"]
+            decoys = {str(random.randint(1, 30)): chr(65+i) for i in range(26)}
         elif "Percent" in title:
-            decoys = ["25", "50", "75", "20", "10", "15", "55", "65"]
-            letters = ["X", "Y", "Z", "W", "Q", "V", "J", "F"]
+            decoys = {str(random.randint(5, 100)): chr(65+i) for i in range(26)}
         else:
-            decoys = ["1", "2", "3", "4", "5", "6", "7", "8"]
-            letters = ["X", "Y", "Z", "W", "Q", "V", "J", "F"]
+            decoys = {str(i): chr(65+i) for i in range(26)}
         
-        return dict(zip(decoys, letters))
+        return decoys
     
     def create_answer_key(self, filename="answer_key_all.pdf"):
         """Create a comprehensive answer key PDF for all worksheets"""
@@ -483,20 +523,33 @@ class MathWorksheetGenerator:
             c.drawString(50, y_position, f"{sheet['title']} ({sheet['filename']})")
             y_position -= 20
             
-            # Problems and answers
-            c.setFont("Helvetica", 10)
-            for i, (problem, answer, letter) in enumerate(sheet['problems'], 1):
-                c.drawString(70, y_position, f"{i}. {problem} = {answer} (Letter: {letter})")
-                y_position -= 18
+            # Problems and answers - use smaller font for longer worksheets
+            font_size = 10 if len(sheet['problems']) <= 20 else 9
+            c.setFont("Helvetica", font_size)
+            
+            # For many problems, use two columns
+            if len(sheet['problems']) > 15:
+                problems_per_column = (len(sheet['problems']) + 1) // 2
+                for i, (problem, answer, letter) in enumerate(sheet['problems']):
+                    column = i // problems_per_column
+                    row = i % problems_per_column
+                    x = 70 + (column * 250)
+                    y = y_position - (row * 15)
+                    c.drawString(x, y, f"{i+1}. {problem} = {answer} ({letter})")
+                y_position -= (problems_per_column * 15)
+            else:
+                for i, (problem, answer, letter) in enumerate(sheet['problems'], 1):
+                    c.drawString(70, y_position, f"{i}. {problem} = {answer} (Letter: {letter})")
+                    y_position -= 15
+            
+            # Check if we need a new page
+            if y_position < 100:
+                c.showPage()
+                y_position = height - 50
                 
-                # Check if we need a new page
-                if y_position < 100:
-                    c.showPage()
-                    y_position = height - 50
-                    
             # Riddle answer
             c.setFont("Helvetica-Bold", 11)
-            c.drawString(70, y_position, f"RIDDLE ANSWER: {sheet['riddle_answer']}")
+            c.drawString(70, y_position - 10, f"RIDDLE ANSWER: {sheet['riddle_answer']}")
             y_position -= 30
             
             # Add separator
@@ -513,15 +566,13 @@ class MathWorksheetGenerator:
         print(f"✓ Answer key created: {filename}")
 
 # Streamlit Interface
-st.set_page_config(page_title="Math Worksheet Generator", page_icon="📐")
+st.set_page_config(page_title="Math Worksheet Generator", page_icon="📐", layout="wide")
 
-st.title("📐 Math Worksheet Generator")
-st.markdown("Generate unique math worksheets with randomized problems and riddles!")
+st.title("📐 Advanced Math Worksheet Generator")
+st.markdown("Generate customizable math worksheets with riddles - choose your own problem count!")
 
-# Worksheet selection
-st.subheader("Generate Worksheets")
-
-col1, col2 = st.columns(2)
+# Main configuration in columns
+col1, col2, col3 = st.columns([2, 2, 1])
 
 with col1:
     st.markdown("### Select Standards")
@@ -532,8 +583,19 @@ with col1:
     percents = st.checkbox("Percents")
 
 with col2:
-    st.markdown("### Number of Versions")
-    st.info("Generate multiple unique versions of each worksheet!")
+    st.markdown("### Worksheet Configuration")
+    
+    # Number of problems per worksheet
+    num_problems = st.slider(
+        "Problems per worksheet",
+        min_value=10,
+        max_value=30,
+        value=15,
+        step=1,
+        help="The riddle answer will have the same number of letters as problems!"
+    )
+    
+    # Number of versions
     num_versions = st.number_input(
         "Versions per standard",
         min_value=1,
@@ -542,108 +604,149 @@ with col2:
         help="Each version will have different problems and riddles"
     )
 
-# Options
-st.subheader("Additional Options")
-generate_answer_key = st.checkbox("Generate Answer Key PDF", value=True)
+with col3:
+    st.markdown("### Options")
+    generate_answer_key = st.checkbox("Generate Answer Key", value=True)
+    
+    st.markdown("### Info")
+    total_worksheets = sum([integers, fractions, decimals, equations, percents]) * num_versions
+    st.info(f"Will generate: **{total_worksheets}** worksheets")
 
-# Show preview of available content
-with st.expander("📚 See Available Content"):
-    st.markdown("""
-    **Problem Banks:**
-    - Integer Operations: 40 unique problems
-    - Fractions: 40 unique problems
-    - Decimals: 40 unique problems
-    - Equations: 40 unique problems
-    - Percents: 40 unique problems
+# Show preview of what will be generated
+with st.expander("📚 Preview Your Configuration"):
+    st.markdown(f"""
+    **Your Settings:**
+    - **{num_problems} problems** per worksheet
+    - **{num_versions} unique versions** of each selected standard
+    - Riddle answers will be **{num_problems} characters long**
     
-    **Riddle Bank:**
-    - 20 riddles with 8-letter answers
-    - 10 riddles with 9-letter answers
+    **Selected Standards:**
+    {('- Integer Operations' if integers else '')}
+    {('- Fractions' if fractions else '')}
+    {('- Decimals' if decimals else '')}
+    {('- One-Step Equations' if equations else '')}
+    {('- Percents' if percents else '')}
     
-    Each worksheet randomly selects 8-9 problems and a riddle, 
-    making every generated worksheet unique!
+    **What makes each worksheet unique:**
+    - Randomly selected problems from large problem banks
+    - Different riddle with {num_problems}-letter answer
+    - Randomized answer bank arrangement
     """)
 
 # Generate button
-if st.button("🎲 Generate Random Worksheets", type="primary"):
-    with st.spinner("Generating unique worksheets..."):
-        # Create generator
-        generator = MathWorksheetGenerator()
-        
-        # Track generated files
-        generated_files = []
-        
-        # Generate selected worksheets
-        standards_to_generate = []
-        if integers:
-            standards_to_generate.append("integers")
-        if fractions:
-            standards_to_generate.append("fractions")
-        if decimals:
-            standards_to_generate.append("decimals")
-        if equations:
-            standards_to_generate.append("equations")
-        if percents:
-            standards_to_generate.append("percents")
-        
-        # Generate multiple versions of each selected standard
-        for standard in standards_to_generate:
-            for version in range(1, num_versions + 1):
-                filename = generator.create_worksheet_from_bank(standard, version)
-                if filename:
-                    generated_files.append(filename)
-        
-        # Generate answer key
-        if generate_answer_key:
-            generator.create_answer_key()
-            generated_files.append("answer_key_all.pdf")
-        
-        # Create zip file
-        zip_buffer = io.BytesIO()
-        with zipfile.ZipFile(zip_buffer, 'w') as zip_file:
-            for file in generated_files:
-                if os.path.exists(file):
-                    zip_file.write(file)
-        
-        # Show success message with details
-        st.success(f"""
-        ✅ Successfully generated {len(generated_files)-1 if generate_answer_key else len(generated_files)} unique worksheets!
-        
-        Each worksheet contains:
-        - Randomly selected problems from the bank
-        - A random riddle to solve
-        - Unique problem combinations
-        """)
-        
-        # Offer download
-        st.download_button(
-            label=f"📥 Download All Files ({len(generated_files)} files)",
-            data=zip_buffer.getvalue(),
-            file_name=f"math_worksheets_{datetime.now().strftime('%Y%m%d_%H%M%S')}.zip",
-            mime="application/zip"
-        )
+if st.button(f"🎲 Generate {total_worksheets} Worksheets", type="primary", disabled=(total_worksheets == 0)):
+    if total_worksheets == 0:
+        st.error("Please select at least one standard!")
+    else:
+        with st.spinner(f"Generating {total_worksheets} unique worksheets with {num_problems}-letter riddles..."):
+            # Create generator
+            generator = MathWorksheetGenerator()
+            
+            # Track generated files
+            generated_files = []
+            
+            # Generate selected worksheets
+            standards_to_generate = []
+            if integers:
+                standards_to_generate.append("integers")
+            if fractions:
+                standards_to_generate.append("fractions")
+            if decimals:
+                standards_to_generate.append("decimals")
+            if equations:
+                standards_to_generate.append("equations")
+            if percents:
+                standards_to_generate.append("percents")
+            
+            # Progress bar
+            progress_bar = st.progress(0)
+            status_text = st.empty()
+            
+            # Generate multiple versions of each selected standard
+            total_generated = 0
+            for standard in standards_to_generate:
+                for version in range(1, num_versions + 1):
+                    status_text.text(f"Generating {standard} worksheet {version}...")
+                    filename = generator.create_worksheet_from_bank(standard, num_problems, version)
+                    if filename:
+                        generated_files.append(filename)
+                    total_generated += 1
+                    progress_bar.progress(total_generated / total_worksheets)
+            
+            # Generate answer key
+            if generate_answer_key:
+                status_text.text("Creating answer key...")
+                generator.create_answer_key()
+                generated_files.append("answer_key_all.pdf")
+            
+            progress_bar.progress(1.0)
+            status_text.text("Creating ZIP file...")
+            
+            # Create zip file
+            zip_buffer = io.BytesIO()
+            with zipfile.ZipFile(zip_buffer, 'w') as zip_file:
+                for file in generated_files:
+                    if os.path.exists(file):
+                        zip_file.write(file)
+                        os.remove(file)  # Clean up after adding to zip
+            
+            # Clear progress indicators
+            progress_bar.empty()
+            status_text.empty()
+            
+            # Show success message with details
+            st.success(f"""
+            ✅ Successfully generated {total_worksheets} unique worksheets!
+            
+            Each worksheet contains:
+            - **{num_problems} problems** randomly selected from the bank
+            - A riddle with a **{num_problems}-letter answer**
+            - Unique problem combinations
+            - Customized answer bank
+            """)
+            
+            # Offer download
+            st.download_button(
+                label=f"📥 Download All Files ({len(generated_files)} files)",
+                data=zip_buffer.getvalue(),
+                file_name=f"math_worksheets_{num_problems}problems_{datetime.now().strftime('%Y%m%d_%H%M%S')}.zip",
+                mime="application/zip"
+            )
 
-# Instructions
-with st.expander("📖 How to Use"):
+# Instructions and tips
+st.markdown("---")
+
+col1, col2 = st.columns(2)
+
+with col1:
     st.markdown("""
-    ### Features:
-    - **Randomized Problems**: Each worksheet pulls from a bank of 40+ problems per standard
-    - **Random Riddles**: 30+ different riddles that students solve using their answers
-    - **Multiple Versions**: Generate up to 10 unique versions of each worksheet type
-    - **Answer Keys**: Comprehensive answer key includes all generated worksheets
+    ### 📖 How to Use
+    1. **Select standards** you want to practice
+    2. **Choose problem count** (10-30 per worksheet)
+    3. **Set versions** (for differentiation)
+    4. **Generate** and download your custom worksheets
     
-    ### Steps:
-    1. **Select standards** you want to generate worksheets for
-    2. **Choose number of versions** (each will be unique!)
-    3. **Click Generate** to create your randomized worksheets
-    4. **Download the ZIP** file containing all materials
-    
-    ### Perfect for:
-    - Differentiated instruction (different worksheet for each student)
-    - Make-up tests and retakes
-    - Extra practice with variety
-    - Preventing copying between students
+    ### 🎯 Problem Count Guidelines
+    - **10-12 problems**: Quick assessment, exit tickets
+    - **15-18 problems**: Standard homework/classwork
+    - **20-25 problems**: Comprehensive practice
+    - **26-30 problems**: Challenge worksheets, tests
     """)
 
-st.markdown("---")
-st.caption("Each time you generate worksheets, you'll get completely different problem combinations and riddles!")
+with col2:
+    st.markdown("""
+    ### ✨ Features
+    - **Flexible Length**: 10-30 problems per worksheet
+    - **Smart Riddles**: Answer length matches problem count
+    - **Huge Problem Banks**: 100+ problems per standard
+    - **True Randomization**: Every worksheet is unique
+    - **Professional Layout**: Auto-adjusts for problem count
+    
+    ### 💡 Tips
+    - Different problem counts prevent copying
+    - Longer worksheets work great for group work
+    - Use 10-problem sheets for quick warm-ups
+    - 30-problem sheets for test preparation
+    """)
+
+st.caption("Each worksheet is dynamically generated with riddles that match your chosen problem count!")
