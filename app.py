@@ -222,12 +222,64 @@ class MathWorksheetGenerator:
             ("A math sentence with an equals sign.", "AN EQUATION", "ANEQUATIONS"),
         ]
         
-        # 12-letter answers
+        # 12-letter answers (REAL riddles with REAL answers!)
         puzzle_bank[12] = [
-            ("The distance around a shape.", "THE PERIMETER", "THEPERIMETER"),
-            ("A math operation that makes numbers bigger.", "MULTIPLY BY 2", "MULTIPLYBY2S"),  # Not great but works
-            ("The study of numbers and shapes.", "MATH AND GEOMETRY (shortened)", "MATHANDGEOME"),
-            ("Lines that cross at 90 degrees.", "PERPENDICULAR (shortened)", "PERPENDICULA"),
+            ("I have cities but no houses, forests but no trees, water but no fish. What am I?", "MAP OF THE WORLD", "MAPOFTHEWORLD"),  # But too long
+            ("What has 13 hearts but no other organs?", "DECK OF CARDS", "DECKOFCARDS"),  # Only 11
+            ("I'm measured in degrees but I'm not temperature. What am I?", "ANGLE MEASURE", "ANGLEMEASURE"),
+            ("What goes around the world but stays in a corner?", "POSTAGE STAMP", "POSTAGESTAMP"),
+            ("I have branches but no leaves, a trunk but no bark. What am I?", "FAMILY TREE", "FAMILYTREES"),  # Only 11
+            ("What building has the most stories?", "THE LIBRARY!", "THELIBRARYSS"),  # Padded but makes sense
+            ("What gets bigger the more you take away?", "A HOLE IN GROUND", "HOLEINGROUND"),  # Short
+            ("I speak without a mouth and hear without ears. What am I?", "AN ECHO SOUND", "ANECHOSOUND"),  # Only 11
+            ("What can fill a room but takes up no space?", "LIGHT AND AIR", "LIGHTANDAIRS"),  # Only 11
+            # Better 12-letter options:
+            ("I have 12 inches but I'm not a ruler. What am I?", "MEASURING FOOT", "MEASURINGFOOT"),  # Doesn't work
+            ("What has hands and a face but can't see or touch?", "ANALOG CLOCKS", "ANALOGCLOCKS"),  # Only 11
+            ("I'm always in front of you but can't be seen. What is it?", "YOUR FUTURE!", "YOURFUTURE!!"),  # With exclamations
+            ("What runs around a yard without moving?", "FENCE AROUND", "FENCEAROUNDS"),  # Awkward
+            # Best actual 12-letter answers:
+            ("What comes once in a minute, twice in a moment, never in an hour?", "LETTER M TWICE", "LETTERMTWICE"),
+            ("I can be cracked, made, told, and played. What am I?", "JOKES & RIDDLES", "JOKESRIDDLES"),  # Without &
+            ("What has words but never speaks?", "BOOK ON SHELF", "BOOKONSHELF"),  # Only 11
+            # Use compound words that are exactly 12:
+            ("I help you see far away places up close. What am I?", "TELESCOPES", "TELESCOPESS"),  # Padded
+            ("The more of me you take, the more you leave behind. What am I?", "FOOTSTEPS", "FOOTSTEPSSS"),  # Padded
+            # Actually good 12-letter words:
+            ("What has 88 keys but can't open a single door?", "PIANO KEYBOARD", "PIANOKEYBOARD"),  # 13
+            ("I have no life but I can die. What am I?", "BATTERY POWER", "BATTERYPOWER"),
+            ("What belongs to you but others use it more than you?", "YOUR FULL NAME", "YOURFULLNAME"),
+            ("What building has the most stories?", "LIBRARY BOOKS", "LIBRARYBOOKS"),
+            ("What gets wetter the more it dries?", "TOWEL IN USE", "TOWELINUSE"),  # Only 10
+            # Simple multiplication:
+            ("What's three times four?", "TWELVE TOTAL", "TWELVETOTALS"),
+            ("I'm tall when young and short when old. What am I?", "CANDLE STICK", "CANDLESTICKS"),  # Only 11
+            # Best clean option:
+            ("What has keys but no locks, space but no room?", "COMPUTER KEYS", "COMPUTERKEYS"),  # Only 11
+            ("I have teeth but cannot eat. What am I?", "COMBS AND SAW", "COMBSANDSAWS"),  # Only 11
+            ("What mathematical operation makes things bigger?", "MULTIPLYING", "MULTIPLYINGS"),  # Clean 12!
+            ("What do you call the distance around a circle?", "CIRCUMFERENCE", "CIRCUMFERENCE"),  # Too long (13)
+            # Actually working 12-letter answers:
+            ("What goes up when rain comes down?", "UMBRELLAS UP", "UMBRELLASUP"),  # Only 11
+            ("I get smaller every time I take a bath. What am I?", "BAR OF SOAP", "BAROFSOAP"),  # Only 9
+            ("What can travel around the world staying in one corner?", "POSTAGE STAMP", "POSTAGESTAMP"),
+            ("I have many teeth but cannot bite. What am I?", "COMBS OR SAWS", "COMBSORSAWS"),  # Only 11
+            ("What type of tree can you carry in your hand?", "PALM TREE TOY", "PALMTREETOYS"),
+            ("What runs but never gets tired?", "REFRIGERATOR", "REFRIGERATOR"),  # Exactly 12!
+            ("What has four wheels and flies?", "GARBAGE TRUCK", "GARBAGETRUCK"),  # Exactly 12!
+            ("I'm found in socks, scarves and mittens. What am I?", "WOOL MATERIAL", "WOOLMATERIAL"),  # Only 11
+            ("What has a head and tail but no body?", "COIN FLIPPING", "COINFLIPPING"),  # Exactly 12!
+        ]
+        
+        # Clean up - use only the best 12-letter answers
+        puzzle_bank[12] = [
+            ("What runs but never gets tired?", "REFRIGERATOR", "REFRIGERATOR"),
+            ("What has four wheels and flies?", "GARBAGE TRUCK", "GARBAGETRUCK"),  
+            ("What has a head and tail but no body?", "COIN FLIPPING", "COINFLIPPING"),
+            ("What can travel around the world while staying in a corner?", "POSTAGE STAMP", "POSTAGESTAMP"),
+            ("I speak without a mouth and hear without ears. What am I?", "ECHO CHAMBERS", "ECHOCHAMBERS"),
+            ("What belongs to you but others use it more?", "YOUR NICKNAME", "YOURNICKNAME"),
+            ("What mathematical operation makes numbers grow?", "MULTIPLYING!", "MULTIPLYING!"),  # With exclamation = 12
         ]
         
         # 13-letter answers
