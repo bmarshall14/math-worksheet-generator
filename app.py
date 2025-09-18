@@ -132,6 +132,8 @@ class MathWorksheetGenerator:
             ("What runs but never walks?", "WATER", "WATER"),
             ("I'm your home, third from the Sun. What am I?", "EARTH", "EARTH"),
             ("What has keys but can't open locks?", "PIANO", "PIANO"),
+            ("What did the buffalo say to her son on the first day of school?", "BISON", "BISON"),
+            ("What has a tongue but cannot talk?", "ASHOE", "ASHOE"),
         ]
         
         # 6-letter riddles
@@ -150,6 +152,7 @@ class MathWorksheetGenerator:
             ("What is a tornado's favorite game?", "TWISTER", "TWISTER"),
             ("I'm closest to the Sun. What am I?", "MERCURY", "MERCURY"),
             ("I guide people but only point. What am I?", "COMPASS", "COMPASS"),
+            ("I can travel up to 100 miles an hour but never leave the room. What am I?", "ASNEEZE", "ASNEEZE"),
         ]
         
         # 8-letter riddles
@@ -159,31 +162,103 @@ class MathWorksheetGenerator:
             ("I go up and down but never move. What am I?", "STAIRWAY", "STAIRWAY"),
             ("I'm sweet and sticky on a stick. What am I?", "POPSICLE", "POPSICLE"),
             ("What has 13 hearts but no organs?", "DECKCARD", "DECKCARD"),
+            ("It belonds to you, but your friends use it more.", "YOURNAME", "YOURNAME"),
+            ("What did one volcano say to the other?", "ILAVAYOU", "ILAVAYOU"),
+            ("What kind of tree fits in your hand?", "PALMTREE", "PALM TREE"),
+            ("What word has 26 letters but only three syllables?", "ALPHABET", "ALPHABET"),
+            ("I can run even though I have no legs. What am I?", "YOURNOSE", "YOURNOSE"),
         ]
         
         # 9-letter riddles
         riddle_bank[9] = [
             ("What has a ring but no finger?", "TELEPHONE", "TELEPHONE"),
-            ("I'm made of sand with a moat. What am I?", "SANDCASTL", "SANDCASTL"),
+            ("What has ears but cannot hear?", "CORNFIELD", "CORNFIELD"),
             ("What happens when a vampire goes in snow?", "FROSTBITE", "FROSTBITE"),
             ("What kind of music do mummies love?", "WRAPMUSIC", "WRAPMUSIC"),
-            ("What's a vampire's favorite candy?", "ASUCKERSS", "ASUCKERSS"),
+            ("What do you call a rabbit with fleas?", "BUGSBUNNY", "BUGSBUNNY"),
+            ("What do you call a fake noodle?", "ANIMPASTA", "ANIMPASTA"),
+            ("What do horses do when it's time for bed?", "HITTHEHAY", "HITTHEHAY"),
+            ("What do you call a cold puppy?", "ACHILIDOG", "ACHILIDOG"),
+            ("What kind of fish knows how to do an appendectomy?", "ASTURGEON", "ASTURGEON"),
+            ("I am always in front of you and never behind you. What am I?", "THEFUTURE", "THEFUTURE"),
         ]
         
         # 10-letter riddles
         riddle_bank[10] = [
-            ("I'm made of sand and might have a moat.", "SANDCASTLE", "SANDCASTLE"),
-            ("Where teachers write lessons.", "BLACKBOARD", "BLACKBOARD"),
-            ("Where you do science experiments?", "LABORATORY", "LABORATORY"),
-            ("A device that helps you compute?", "CALCULATOR", "CALCULATOR"),
-            ("Where kids play at school?", "PLAYGROUND", "PLAYGROUND"),
+            ("I'm made of sand and might have a moat. Build me near water, but I'm not a boat.", "SANDCASTLE", "SANDCASTLE"),
+            ("What do you call two witches living together?", "BROOMMATES", "BROOMMATES"),
+            ("I ring when it's time to start or end. I'm not a phone, but I'm every students friend.", "SCHOOLBELL", "SCHOOLBELL"),
+            ("What do you give a vampire when they're sick?", "COFFINDROPS", "COFFINDROPS"),
+            ("Which side of the turkey has the most feathers?", "THEOUTSIDE", "THEOUTSIDE"),
+            ("How do astronomers organize a party?", "THEYPLANIT", "THEYPLANIT"),
+            ("What's the easiest building to lift?", "LIGHTHOUSE", "LIGHTHOUSE"),
+            ("What do you call it when a cow grows facial hair?", "AMOOSTACHE", "AMOOSTACHE"),
+            ("What do you call an anxious fly?", "AJITTERBUG", "AJITTERBUG"),
+            ("The more you take, the more you leave behind. What am I?", "FOOTPRINTS", "FOOTPRINTS"),
+            ("What do you find at the end of the rainbow?", "THELETTERW", "THELETTERW"),
+            ("Solve the problems below to uncover a phrase!", "YOUGOTTHIS", "YOUGOTTHIS"),
+            
         ]
         
-        # For longer worksheets, use generic riddles
-        for i in range(11, 21):
-            riddle_bank[i] = [
-                (f"Math riddle with {i} letters!", "MATHEMATICS"[:i].ljust(i, 'X'), "MATHEMATICS"[:i].ljust(i, 'X'))
-            ]
+        # 11-letter riddles
+        riddle_bank[11] = [
+            ("What do you call a sleeping bull?", "BULLDOZER", "BULLDOZER"),
+            ("What do you call two birds in love?", "TWEETHEARTS", "TWEETHEARTS"),
+            ("What are ten things you can always count on?", "YOURFINGERS", "YOURFINGERS"),
+            ("What is a rabbit's favorite dance??", "THEBUNNYHOP", "THEBUNNYHOP"),
+            ("What kind of milk comes from a pampered cow?", "SPOILEDMILK", "SPOILEDMILK"),
+            ("What's a sea monster's favorite lunch?", "FISHANDSHIPS", "FISHANDSHIPS"),
+            ("What kind of bagel can travel?", "APLAINBAGEL", "APLAINBAGEL"),
+            ("What kind of band can’t play music?", "ARUBBERBAND", "ARUBBERBAND"),
+            ("Where is the ocean the deepest?", "ONTHEBOTTOM", "ONTHEBOTTOM"),
+        ]
+
+        # 12-letter riddles
+        riddle_bank[12] = [
+            ("What has wheels and flies but is not an airplane?", "GARBAGETRUCK", "GARBAGETRUCK"),
+            ("What does a clam do on it's birthday?", "SHELLEBRATES", "SHELLEBRATES"),
+            ("What kind of candy do you eat on a playground ?", "RECESSPIECES", "RECESSPIECES"),
+            ("Where do math teachers go on vacation?", "NUMBERVILLE", "NUMBERVILLE"),
+            ("What's a vampire's favorite fruit?", "BLOODORANGES", "BLOODORANGES"),
+            ("What kind of car does a sheep like to drive?", "ALAMBORGHINI", "ALAMBORGHINI"),
+            ("Where do penguins go to vote?", "THENORTHPOLL", "THENORTHPOLL"),
+        ]
+
+        # 13-letter riddles
+        riddle_bank[13] = [
+            ("What do you say to a kangaroo on its birthday?", "HOPPYBIRTHDAY", "HOPPYBIRTHDAY"),
+            ("I help you see the stars at night. What am I?", "TELESCOPESYS", "TELESCOPESYS"),
+            ("What's a math teacher's favorite season?", "MULTIPLYSPRING", "MULTIPLYSPRING"),
+            ("What rock group has four men who can't sing?", "MOUNTRUSHMORE", "MOUNTRUSHMORE"),
+            ("What do you call a funny mountain?", "HILARIOUSHILL", "HILARIOUSHILL"),
+            ("What do cats eat for breakfast?", "MICEKRISPIRES", "MICEKRISPIRES"),
+            ("What do you get when you cross a fish with an elephant?", "SWIMMINGTRUNKS", "SWIMMINGTRUNKS"),
+            ("How do you find a cheetah in the dark?", "USEASPOTLIGHT", "USEASPOTLIGHT"),
+            ("What do you call a happy cowboy?", "AJOLLYRANCHER", "AJOLLYRANCHER"),
+        ]
+
+        # 14-letter riddles
+        riddle_bank[14] = [
+            ("What are two things you can never have for breakfast?", "LUNCHANDDINNER", "LUNCHANDDINNER"),
+            ("What did the little corn say to the mama corn?", "WHEREISPOPCORN", "WHEREISPOPCORN"),
+            ("What do you call an alligator in a vest?", "ANINVESTIGATOR", "ANINVESTIGATOR"),
+            ("Where do surfers go for an education?", "BOARDINGSCHOOL", "BOARDINGSCHOOL"),
+            ("What do you call someone who raises hens?", "ACHICKENTENDER", "ACHICKENTENDER"),
+            ("What is the best place to grow a garden in school?", "INKINDERGARTEN", "INKINDERGARTEN"),
+            ("A king, a queen, and two twins are in a room. How are there no adults?", "THEYAREALLBEDS", "THEYAREALLBEDS"),
+            ("What has a lot of needles but can’t sew?", "ACHRISTMASTREE", "ACHRISTMASTREE"),
+        ]
+
+        # 15-letter riddles
+        riddle_bank[15] = [
+            ("How do fish pay for groceries", "WITHSANDDOLLARS", "WITHSANDDOLLARS"),
+            ("What do you call a dog magician?", "LABRACADABRADOR", "LABRACADABRADOR"),
+            ("Solve the problems below to uncover a word!", "ACCOMPLISHMENTS", "ACCOMPLISHMENTS"),
+            ("Solve the problems below to uncover a word!", "EXTRAORDINARILY", "EXTRAORDINARILY"),
+            ("Solve the problems below to uncover a word!", "RESOURCEFULLNESS", "RESOURCEFULLNESS"),
+            ("Solve the problems below to uncover a word!", "KINDHEARTEDNESS", "KINDHEARTEDNESS"),
+        ]
+
         
         return riddle_bank
     
@@ -1494,9 +1569,13 @@ def main():
         num_problems = st.slider("Problems per Worksheet", 3, 20, 8)
         
         can_use_riddles = any(s[0] in RIDDLE_COMPATIBLE_STANDARDS for s in selected_standards)
-        
+
         if can_use_riddles:
-            use_riddles = st.checkbox("Include riddles (where applicable)", True)
+            if num_problems <= 15:
+                use_riddles = st.checkbox("Include riddles (where applicable)", True)
+            else:
+                use_riddles = st.checkbox("Include riddles (where applicable)", False, disabled=True)
+                st.error("⚠️ Riddles are only available for worksheets with 15 questions or fewer. Please reduce the number of problems to enable riddles.")
         else:
             use_riddles = False
             st.info("Selected standards don't support riddles")
